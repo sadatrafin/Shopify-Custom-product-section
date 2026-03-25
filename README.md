@@ -1,1 +1,2 @@
- ![Image Alt](https://github.com/Sadat25/Shopify-Custom-Featured/blob/f338bcea636a95b50f26a7572e5549cb697ebd2e/Screenshot%202026-03-07%20150115.png)
+ ![Image Alt](https://github.com/sadatrafin/Shopify-Custom-product-section/blob/72568f61cc542ab1e45a5b1042cc76af76e6b423/Screenshot_2.png)
+  ![Image Alt](https://github.com/sadatrafin/Shopify-Custom-product-section/blob/72568f61cc542ab1e45a5b1042cc76af76e6b423/Screenshot_1.png)
