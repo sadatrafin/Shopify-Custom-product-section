@@ -5,292 +5,298 @@
 {%- liquid
   assign product = section.settings.product
   assign current_variant = product.selected_or_first_available_variant
-  assign featured_image = current_variant.featured_image | default: product.featured_image
+  assign custom_image = section.settings.custom_image
+
+  assign featured_image = custom_image | default: current_variant.featured_image | default: product.featured_image
 -%}
 
 {% style %}
-  #shopify-section-{{ section.id }} {
-    --bg-color: {{ section.settings.section_bg_color }};
-    --text-color: {{ section.settings.text_color }};
-    --btn-bg: {{ section.settings.button_bg_color }};
-    --btn-text: {{ section.settings.button_text_color }};
-    --buy-btn-bg: {{ section.settings.buy_button_bg_color }};
-    --buy-btn-text: {{ section.settings.buy_button_text_color }};
-    --border-radius: {{ section.settings.border_radius }}px;
-    --container-width: {{ section.settings.container_width }}px;
-    --gap: {{ section.settings.gap }}px;
-  }
-
-  .cfp-section-{{ section.id }} {
-    background-color: var(--bg-color);
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
-    color: var(--text-color);
-    font-family: inherit;
-  }
-
-  .cfp-container {
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: 0 {{ section.settings.mobile_spacing }}px;
-  }
-
-  .cfp-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap);
-    align-items: center;
-  }
-
-  @media screen and (min-width: 750px) {
-    .cfp-grid {
-      grid-template-columns: 1fr 1fr;
-      padding: 0 0px;
+    #shopify-section-{{ section.id }} {
+      --bg-color: {{ section.settings.section_bg_color }};
+      --text-color: {{ section.settings.text_color }};
+      --btn-bg: {{ section.settings.button_bg_color }};
+      --btn-text: {{ section.settings.button_text_color }};
+      --buy-btn-bg: {{ section.settings.buy_button_bg_color }};
+      --buy-btn-text: {{ section.settings.buy_button_text_color }};
+      --border-radius: {{ section.settings.border_radius }}px;
+      --container-width: {{ section.settings.container_width }}px;
+      --gap: {{ section.settings.gap }}px;
     }
+
+    .cfp-section-{{ section.id }} {
+      background-color: var(--bg-color);
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      color: var(--text-color);
+      font-family: inherit;
+    }
+
     .cfp-container {
-      padding: 0 0px;
+      max-width: var(--container-width);
+      margin: 0 auto;
+      padding: 0 {{ section.settings.mobile_spacing }}px;
     }
-  }
 
-  .cfp-image-wrapper {
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    aspect-ratio: 1 / 1;
-    padding: 0;
-    {% if section.settings.enable_shadow %}
-      box-shadow: 0 30px 60px rgba(0,0,0,0.12);
-    {% endif %}
-  }
+    .cfp-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+      align-items: center;
+    }
 
-  .cfp-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
-    {% if section.settings.enable_rounded_image %}
+    @media screen and (min-width: 750px) {
+      .cfp-grid {
+        grid-template-columns: 1fr 1fr;
+        padding: 0 0px;
+      }
+      .cfp-container {
+        padding: 0 0px;
+      }
+    }
+
+    .cfp-image-wrapper {
       border-radius: var(--border-radius);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 0;
+      {% if section.settings.enable_shadow %}
+        box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+      {% endif %}
+    }
+
+    .cfp-image-wrapper img {
+      width: 100%;
+      transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+      {% if section.settings.enable_rounded_image %}
+        border-radius: var(--border-radius);
+      {% endif %}
+    }
+
+    {% if section.settings.enable_hover_effect %}
+    .cfp-image-wrapper:hover img {
+      transform: scale(1.08);
+    }
     {% endif %}
-  }
 
-  {% if section.settings.enable_hover_effect %}
-  .cfp-image-wrapper:hover img {
-    transform: scale(1.08);
-  }
-  {% endif %}
+    .cfp-info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
 
-  .cfp-info {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+    .cfp-title {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
 
-  .cfp-title {
-    margin: 0;
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-  }
+    .cfp-price-wrapper {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
 
-  .cfp-price-wrapper {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
+    .cfp-compare-price {
+      text-decoration: line-through;
+      color: #999;
+      font-weight: 400;
+      font-size: 1.1rem;
+    }
 
-  .cfp-compare-price {
-    text-decoration: line-through;
-    color: #999;
-    font-weight: 400;
-    font-size: 1.1rem;
-  }
+    .cfp-description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
 
-  .cfp-description {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    opacity: 0.8;
-  }
+    .cfp-variant-select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+    }
 
-  .cfp-variant-select {
-    width: 100%;
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: 1px solid rgba(0,0,0,0.1);
-    background: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-  }
+    .cfp-quantity-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      width: fit-content;
+      overflow: hidden;
+    }
 
-  .cfp-quantity-wrapper {
-    display: flex;
-    align-items: center;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 8px;
-    width: fit-content;
-    overflow: hidden;
-  }
+    .cfp-qty-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
 
-  .cfp-qty-btn {
-    background: none;
-    border: none;
-    padding: 12px 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-  }
+    .cfp-qty-btn:hover {
+      background: rgba(0,0,0,0.05);
+    }
 
-  .cfp-qty-btn:hover {
-    background: rgba(0,0,0,0.05);
-  }
+    .cfp-qty-input {
+      width: 50px;
+      text-align: center;
+      border: none;
+      font-weight: 600;
+      -moz-appearance: textfield;
+    }
 
-  .cfp-qty-input {
-    width: 50px;
-    text-align: center;
-    border: none;
-    font-weight: 600;
-    -moz-appearance: textfield;
-  }
-
-  .cfp-qty-input::-webkit-outer-spin-button,
-  .cfp-qty-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+    .cfp-qty-input::-webkit-outer-spin-button,
+    .cfp-qty-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 
 
-  .cfp-actions-row {
-    display: flex;
-    gap: 15px;
-    align-items: stretch;
-    margin-bottom: 15px;
+    .cfp-actions-row {
+      display: flex;
+      gap: 15px;
+      align-items: stretch;
+      margin-bottom: 15px;
+    }
+
+    .cfp-actions-row .left {
+    flex: 0 0 35%;
   }
 
-  .cfp-qty-selector, .cfp-atc-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  .cfp-actions-row .right {
+    flex: 0 0 63%;
   }
 
-  .cfp-quantity-wrapper {
-    display: flex;
-    align-items: center;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 12px;
-    width: 100%;
-    height: 100%;
-    min-height: 56px;
-    overflow: hidden;
-    background: #fff;
-  }
+    .cfp-qty-selector, .cfp-atc-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
 
-  .cfp-qty-btn {
-    background: none;
-    border: none;
-    flex: 1;
-    height: 100%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-    font-size: 2.2rem;
-  }
+    .cfp-quantity-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 12px;
+      width: 100%;
+      height: 100%;
+      min-height: 54px;
+      overflow: hidden;
+      background: #fff;
+    }
 
-  .cfp-qty-btn:hover {
-    background: rgba(0,0,0,0.03);
-  }
+    .cfp-qty-btn {
+      background: none;
+      border: none;
+      flex: 1;
+      height: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      font-size: 2.2rem;
+    }
 
-  .cfp-qty-input {
-    width: 40px;
-    text-align: center;
-    border: none;
-    font-weight: 700;
-    font-size: 1.5rem;
-    background: transparent;
-    -moz-appearance: textfield;
-  }
+    .cfp-qty-btn:hover {
+      background: rgba(0,0,0,0.03);
+    }
 
-  .cfp-qty-input::-webkit-outer-spin-button,
-  .cfp-qty-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+    .cfp-qty-input {
+      width: 40px;
+      text-align: center;
+      border: none;
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: transparent;
+      -moz-appearance: textfield;
+    }
 
-  .cfp-btn {
-    width: 100%;
-    height: 100%;
-    min-height: 70px;
-    border-radius: 12px;
-    border: none;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
+    .cfp-qty-input::-webkit-outer-spin-button,
+    .cfp-qty-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 
-  .cfp-btn-atc {
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
+    .cfp-btn {
+      width: 100%;
+      height: 100%;
+      min-height: 55px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 500;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
 
-  .cfp-btn-atc:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  }
+    .cfp-btn-atc {
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
 
-  .cfp-btn-buy {
-    background-color: var(--buy-btn-bg);
-    color: var(--buy-btn-text);
-    margin-top: 5px;
-    padding-top: 4px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  }
+    .cfp-btn-atc:hover {
+      scale:1.02;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+          background-color: #F97316 !important;
+    }
 
-  .cfp-btn-buy:hover {
-    opacity: 0.95;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  }
+    .cfp-btn-buy {
+      background-color: var(--buy-btn-bg);
+      color: var(--buy-btn-text);
+      margin-top: 5px;
+      padding-top: 4px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
 
-  .shopify-payment-button__button--unbranded {
-    border-radius: 12px !important;
-    padding: 18px !important;
-    font-weight: 700 !important;
-  }
+    .cfp-btn-buy:hover {
+    scale:1.02;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      background-color: #F97316 !important;
+    }
+
+    .shopify-payment-button__button--unbranded {
+      border-radius: 12px !important;
+      padding: 18px !important;
+      font-weight: 700 !important;
+    }
 {% endstyle %}
 
 <div class="cfp-section-{{ section.id }}">
   <div class="cfp-container">
     {% if product != blank %}
       <div class="cfp-grid">
-        <!-- Left: Image -->
         <div class="cfp-image-wrapper">
-          <img 
+          <img
             id="ProductImage-{{ section.id }}"
-            src="{{ featured_image | image_url: width: 1200 }}" 
+            src="{{ featured_image | image_url: width: 1200 }}"
             alt="{{ featured_image.alt | escape }}"
             loading="lazy"
             width="{{ featured_image.width }}"
             height="{{ featured_image.height }}"
+            data-has-custom-image="{% if section.settings.custom_image %}true{% else %}false{% endif %}"
           >
         </div>
 
-        <!-- Right: Info -->
         <div class="cfp-info">
           <h2 class="cfp-title">{{ product.title }}</h2>
 
@@ -303,25 +309,29 @@
 
           {% if section.settings.show_description %}
             <div class="cfp-description">
-{% if section.settings.description_type == 'manual' %}
-  {{ section.settings.custom_description }}
-{% else %}
-  {{ product.description | strip_html | truncatewords: section.settings.description_length }}
-{% endif %}
+              {% if section.settings.description_type == 'manual' %}
+                {{ section.settings.custom_description }}
+              {% else %}
+                {{ product.description | strip_html | truncatewords: section.settings.description_length }}
+              {% endif %}
             </div>
           {% endif %}
 
-          {% form 'product', product, id: "ProductForm-{{ section.id }}" %}
+          {% form 'product', product, id: 'ProductForm-{{ section.id }}' %}
             <input type="hidden" name="id" value="{{ current_variant.id }}">
 
             {% if section.settings.show_variant and product.variants.size > 1 %}
               <div style="margin-bottom: 20px;">
-                <label style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6;">Select Variant</label>
+                <label style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6;"
+                  >Select Variant</label
+                >
                 <select name="id" id="VariantSelector-{{ section.id }}" class="cfp-variant-select">
                   {% for variant in product.variants %}
-                    <option 
+                    <option
                       value="{{ variant.id }}"
-                      {% if variant == current_variant %}selected="selected"{% endif %}
+                      {% if variant == current_variant %}
+                        selected="selected"
+                      {% endif %}
                       data-price="{{ variant.price | money }}"
                       data-compare-price="{{ variant.compare_at_price | money }}"
                       data-image="{{ variant.featured_image | image_url: width: 1200 }}"
@@ -335,21 +345,44 @@
 
             <div class="cfp-actions-row">
               {% if section.settings.show_quantity %}
-                <div class="cfp-qty-selector">
-                  <label style="display:block; margin-bottom: 8px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5;">Quantity</label>
+                <div class="cfp-qty-selector left">
+                  <label style="display:block; margin-bottom: 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em;"
+                    >Quantity</label
+                  >
                   <div class="cfp-quantity-wrapper">
-                    <button type="button" class="cfp-qty-btn" onclick="this.parentNode.querySelector('input').stepDown()">−</button>
+                    <button
+                      type="button"
+                      class="cfp-qty-btn"
+                      onclick="this.parentNode.querySelector('input').stepDown()"
+                    >
+                      −
+                    </button>
                     <input type="number" name="quantity" value="1" min="1" class="cfp-qty-input">
-                    <button type="button" class="cfp-qty-btn" onclick="this.parentNode.querySelector('input').stepUp()">+</button>
+                    <button type="button" class="cfp-qty-btn" onclick="this.parentNode.querySelector('input').stepUp()">
+                      +
+                    </button>
                   </div>
                 </div>
               {% endif %}
 
               {% if section.settings.show_add_to_cart %}
-                <div class="cfp-atc-wrapper">
-                  <label style="display:block; margin-bottom: 8px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0; pointer-events: none;">Add</label>
+                <div class="cfp-atc-wrapper right">
+                  <label style="display:block; margin-bottom: 8px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0; pointer-events: none;"
+                    >Add</label
+                  >
                   <button type="submit" name="add" class="cfp-btn cfp-btn-atc">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
                     Add to Cart
                   </button>
                 </div>
@@ -358,9 +391,7 @@
 
             <div class="cfp-secondary-actions">
               {% if section.settings.show_buy_now %}
-                <button type="submit" name="checkout" class="cfp-btn cfp-btn-buy">
-                  Buy Now
-                </button>
+                <button type="submit" name="checkout" class="cfp-btn cfp-btn-buy">Buy Now</button>
               {% endif %}
             </div>
           {% endform %}
@@ -375,24 +406,27 @@
 </div>
 
 {% javascript %}
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const selectors = document.querySelectorAll('[id^="VariantSelector-"]');
-    
-    selectors.forEach(select => {
-      select.addEventListener('change', function() {
+
+    selectors.forEach((select) => {
+      select.addEventListener('change', function () {
         const sectionId = this.id.replace('VariantSelector-', '');
         const selectedOption = this.options[this.selectedIndex];
-        
+
         // Update Price
         const priceContainer = document.getElementById(`Price-${sectionId}`);
         if (priceContainer) {
           const currentPrice = priceContainer.querySelector('.cfp-current-price');
           const comparePrice = priceContainer.querySelector('.cfp-compare-price');
-          
+
           if (currentPrice) currentPrice.innerText = selectedOption.dataset.price;
-          
+
           if (comparePrice) {
-            if (selectedOption.dataset.comparePrice && selectedOption.dataset.comparePrice !== selectedOption.dataset.price) {
+            if (
+              selectedOption.dataset.comparePrice &&
+              selectedOption.dataset.comparePrice !== selectedOption.dataset.price
+            ) {
               comparePrice.innerText = selectedOption.dataset.comparePrice;
               comparePrice.style.display = 'inline';
             } else {
@@ -400,10 +434,10 @@
             }
           }
         }
-        
-        // Update Image
+
+        // Update Image (Only if they didn't upload a custom override image)
         const productImage = document.getElementById(`ProductImage-${sectionId}`);
-        if (productImage && selectedOption.dataset.image) {
+        if (productImage && selectedOption.dataset.image && productImage.dataset.hasCustomImage !== 'true') {
           productImage.src = selectedOption.dataset.image;
         }
 
@@ -428,6 +462,12 @@
       "label": "Select Product"
     },
     {
+      "type": "image_picker",
+      "id": "custom_image",
+      "label": "Custom Product Image (Optional)",
+      "info": "Upload an image to override the default product image."
+    },
+    {
       "type": "select",
       "id": "description_type",
       "label": "Description Source",
@@ -443,15 +483,15 @@
       "label": "Custom Description",
       "info": "Used when Description Source is set to Manual"
     },
-{
-  "type": "range",
-  "id": "description_length",
-  "min": 10,
-  "max": 200,
-  "step": 5,
-  "label": "Description length (words)",
-  "default": 40
-},
+    {
+      "type": "range",
+      "id": "description_length",
+      "min": 10,
+      "max": 200,
+      "step": 5,
+      "label": "Description length (words)",
+      "default": 40
+    },
     {
       "type": "header",
       "content": "Visibility"
