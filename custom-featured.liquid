@@ -1,6 +1,5 @@
 {% comment %}
   Custom Featured Product Section
-  Created by Senior Shopify Developer
 {% endcomment %}
 
 {%- liquid
@@ -304,11 +303,11 @@
 
           {% if section.settings.show_description %}
             <div class="cfp-description">
-              {% if section.settings.description_type == 'manual' %}
-                {{ section.settings.custom_description }}
-              {% else %}
-                {{ product.description | strip_html | truncatewords: 23 }}
-              {% endif %}
+{% if section.settings.description_type == 'manual' %}
+  {{ section.settings.custom_description }}
+{% else %}
+  {{ product.description | strip_html | truncatewords: section.settings.description_length }}
+{% endif %}
             </div>
           {% endif %}
 
@@ -444,6 +443,15 @@
       "label": "Custom Description",
       "info": "Used when Description Source is set to Manual"
     },
+{
+  "type": "range",
+  "id": "description_length",
+  "min": 10,
+  "max": 200,
+  "step": 5,
+  "label": "Description length (words)",
+  "default": 40
+},
     {
       "type": "header",
       "content": "Visibility"
